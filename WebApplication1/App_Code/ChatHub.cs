@@ -35,4 +35,33 @@ public class ChatHub : Hub
 
         int result = cmd.ExecuteNonQuery();
     }
+    public void Deregister( string message,string connid)
+    {
+        try
+        {
+            // Connection string for a typical local MySQL installation
+            string cnnString = "Server=localhost;Port=3306;Database=tut;Uid=root;Pwd=1234;";
+
+            // Create a connection object 
+            MySqlConnection connection = new MySqlConnection(cnnString);
+
+            // Create a SQL command object
+            string cmdText = "DELETE FROM videochat WHERE connid=" + connid + ";";
+
+            MySqlCommand cmd = new MySqlCommand(cmdText, connection);
+
+            connection.Open();
+
+            cmd.CommandType = CommandType.Text;
+            cmd.ExecuteNonQuery();
+            
+            //                result.Text = "Done...";
+            connection.Close();
+
+        }
+        catch (Exception ex)
+        {
+            //                result.Text = ex.Message;
+        }
+    }
 }

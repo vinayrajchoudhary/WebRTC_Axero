@@ -34,11 +34,12 @@ textarea {
 
 </head>
 <body>
+    <asp:Panel ID="users" runat="server" ></asp:Panel>
  <div >
  Online Users
-     <ol id ="olusers">
+     <div id ="olusers">
    
-     </ol>
+     </div>
  </div>
 
 <video id="vid1" autoplay="true" muted="true"></video>
@@ -47,8 +48,7 @@ textarea {
 
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
 <script>
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    var vid1 = document.getElementById("vid1");
+       var vid1 = document.getElementById("vid1");
     var vid2 = document.getElementById("vid2");
 
     var chat = $.connection.chatHub;
@@ -58,7 +58,7 @@ textarea {
         remoteconnectionid = number;
         start(true);
     }
-    $('li').live('click', function () {
+    $('span').live('click', function () {
         
         call_person($(this).attr("id"));
     });
@@ -81,9 +81,12 @@ textarea {
             pc.setRemoteDescription(new RTCSessionDescription(signal.sdp));
 
         else if (signal.user_arrived) {
-            $('#olusers').append('<li id= '+sender+'>'
-           + signal.user_arrived + '</li>');
+            $('#olusers').append('<span id= '+sender+'>'
+           + signal.user_arrived + '</span>');
 
+        }
+        else if (signal.user_gone) {
+            alert("");
         }
 
         else {
@@ -107,7 +110,7 @@ textarea {
     // run start(true) to initiate a call
     function start(isCaller) {
         pc = new RTCPeerConnection(configuration);
-        
+       
         // send any ice candidates to the other peer
         pc.onicecandidate = function (evt) {
            
@@ -120,11 +123,14 @@ textarea {
         };
 
         // get the local stream, show it in the local video element and send it
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
         navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
             vid1.src = URL.createObjectURL(stream);
             pc.addStream(stream);
 
             if (isCaller) {
+                
                 pc.createOffer(gotDescription);
                 console.log("is a caller and created offer ");
                 function gotDescription(desc) {
@@ -157,8 +163,9 @@ textarea {
         }
     }
     onbeforeunload = function (e) {
-    
-      
+        var m = JSON.stringify({"user_gone": name});
+        alert(m + myconnectionid);
+        chat.server.deregister(m, myconnectionid);
     }
     function initialize() {
         var name = prompt("your name");
@@ -174,6 +181,7 @@ textarea {
     }
     
     </script>
+
 <button id="btn2" onclick="accept()">Accept</button>
 <button id="btn3" onclick="stop()">Hang Up</button>
   </body>
