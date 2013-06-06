@@ -6,16 +6,17 @@
 <head runat="server">
   <title>PeerConnection Demo 1</title>
 <!-- Load the polyfill to switch-hit between Chrome and Firefox -->
-<script src="http://webrtc.googlecode.com/svn/trunk/samples/js/base/adapter.js"></script>
+<script src="Scripts/adapter.js"></script>
        <script src="Scripts/jquery-1.6.4.js"></script>
     <script src="Scripts/jquery.signalR-1.1.0.js"></script>
    <script src="/signalr/hubs"></script>
 
 <style>
+
 video {
   border:5px solid black;
-  width:480px;
-  height:360px;
+    width:480px;
+          height:360px;
 }
 button {
   font: 18px sans-serif;
@@ -27,6 +28,9 @@ textarea {
   width:480px;
   height:640px;
 }
+    .right
+    {float:right;
+    }
 </style>
   <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -34,11 +38,14 @@ textarea {
 
 </head>
 <body>
-    <asp:Panel ID="users" runat="server" ></asp:Panel>
+<div class ="right">
+
+</div>
  <div >
  Online Users
      <div id ="olusers">
-   
+   <asp:Panel ID="users" runat="server" ></asp:Panel> 
+ 
      </div>
  </div>
 
@@ -50,7 +57,7 @@ textarea {
 <script>
        var vid1 = document.getElementById("vid1");
     var vid2 = document.getElementById("vid2");
-
+    var name = "";
     var chat = $.connection.chatHub;
     var myconnectionid, remoteconnectionid;
 
@@ -58,7 +65,7 @@ textarea {
         remoteconnectionid = number;
         start(true);
     }
-    $('span').live('click', function () {
+    $('li').live('click', function () {
         
         call_person($(this).attr("id"));
     });
@@ -73,20 +80,23 @@ textarea {
     chat.client.broadcastMessage = function (message, sender) {
         var msg = JSON.parse(message);
         remoteconnectionid = sender;
-        if (!pc && !msg.user_arrived)
+        if (!pc && !msg.user_arrived && !msg.user_gone) {
+            alert("Someone is calling you");
             start(false);
+        }
         console.log(message + sender);
         var signal = JSON.parse(message);
         if (signal.sdp)
             pc.setRemoteDescription(new RTCSessionDescription(signal.sdp));
 
         else if (signal.user_arrived) {
-            $('#olusers').append('<span id= '+sender+'>'
-           + signal.user_arrived + '</span>');
+            $('#olusers').append('<li id= '+sender+'>'
+           + signal.user_arrived + '</li></br>');
 
         }
         else if (signal.user_gone) {
-            alert("");
+            $('li#' + sender).remove(); 
+            console.log(sender+"a user has left");
         }
 
         else {
@@ -124,12 +134,12 @@ textarea {
 
         // get the local stream, show it in the local video element and send it
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
         navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
             vid1.src = URL.createObjectURL(stream);
             pc.addStream(stream);
-
+      
             if (isCaller) {
+              
                 
                 pc.createOffer(gotDescription);
                 console.log("is a caller and created offer ");
@@ -145,8 +155,8 @@ textarea {
                 console.log("waiting you to accept and send answer");
             }
 
-          
         });
+        
     }
   
   
@@ -155,6 +165,7 @@ textarea {
 
     }
     function accept(){
+        
         pc.createAnswer(gotDescription, null, mediaConstraints);
         btn2.disabled = true;
         function gotDescription(desc) {
@@ -163,14 +174,17 @@ textarea {
         }
     }
     onbeforeunload = function (e) {
-        var m = JSON.stringify({"user_gone": name});
-        alert(m + myconnectionid);
-        chat.server.deregister(m, myconnectionid);
+      //  var m = JSON.stringify({"user_gone": name});
+      //  chat.server.sendtoall(m, myconnectionid);
+      //  setTimeout('', 2000);
+       // alert(m + myconnectionid);
+       // chat.server.deregister(m, myconnectionid);
     }
     function initialize() {
-        var name = prompt("your name");
+        name = prompt("your name");
+        // uncomment below line to save first user to database
+        $('.right').append('Hi, ' + name);
         chat.server.register(name, "a", myconnectionid);
-        
         chat.server.sendtoall(JSON.stringify({ "user_arrived": name }), myconnectionid);
     }
     function stop() {
@@ -179,11 +193,16 @@ textarea {
         vid1.src = URL.createObjectURL(null);
         vid2.src = URL.createObjectURL(null);
     }
-    
+    function offline() {
+          var m = JSON.stringify({"user_gone": name});
+          chat.server.sendtoall(m, myconnectionid);
+        //  setTimeout('', 2000);
+         chat.server.deregister(m, myconnectionid);
+    }
     </script>
 
 <button id="btn2" onclick="accept()">Accept</button>
 <button id="btn3" onclick="stop()">Hang Up</button>
+    <button id="Button1" onclick="offline()">Go offline</button>
   </body>
 </html>
-
