@@ -1,0 +1,17 @@
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\WebApplication1.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\WebApplication1.pdb
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.Owin.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Newtonsoft.Json.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Owin.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.Owin.xml
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\bin\Newtonsoft.Json.xml
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\obj\Release\webRTC_conference.csprojResolveAssemblyReference.cache
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\obj\Release\WebApplication1.dll
+C:\Users\it's for you\Documents\Visual Studio 2012\Projects\WebApplication1\WebApplication1\obj\Release\WebApplication1.pdb

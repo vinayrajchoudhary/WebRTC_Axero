@@ -6,8 +6,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Routing;
 using Microsoft.AspNet.SignalR;
-using MySql.Data.MySqlClient;
+
 using System.Data;
+using System.Data.SqlClient;
 namespace WebApplication1
 {
     public partial class Site1 : System.Web.UI.MasterPage
@@ -16,22 +17,23 @@ namespace WebApplication1
         {
             try
             {
-                string cnnString = "Server=localhost;Port=3306;Database=tut;Uid=root;Pwd=1234;";
-                MySqlConnection connection = new MySqlConnection(cnnString);
+                string cnnString = "Data Source=.\\SQLEXPRESS;AttachDbFilename=\"|DataDirectory|\\Database1.mdf\";Integrated Security=True;User Instance=True;";
+               
+                 SqlConnection connection = new SqlConnection(cnnString);
 
-                string cmdText = "SELECT user,connid FROM videochat;";
-                MySqlCommand cmd = new MySqlCommand(cmdText, connection);
+                string cmdText = "SELECT username,connid FROM videochat;";
+                SqlCommand cmd = new SqlCommand(cmdText, connection);
 
                 connection.Open();
 
                 cmd.CommandType = CommandType.Text;
-                MySqlDataReader dr = cmd.ExecuteReader();
+                SqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
                     
                     users.Controls.Add(new LiteralControl("<br />"));
-                    users.Controls.Add(new LiteralControl("<li id=" + dr["connid"].ToString() + ">" + dr["user"].ToString() + "</li>"));
+                    users.Controls.Add(new LiteralControl("<li id=" + dr["connid"].ToString() + ">" + dr["username"].ToString() + "</li>"));
                 }
                 dr.Close();
                 connection.Close();

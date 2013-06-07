@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using MySql.Data.MySqlClient;
 using System.Data;
-using System.Data.SqlClient;
 public class ChatHub : Hub
 {
     public void Send( string receiverconnectid, string message, string myconnectid)
@@ -19,14 +19,18 @@ public class ChatHub : Hub
     }
     public void Register(string user,string pass, string connid)
     {
-        string cnnString = "Data Source=.\\SQLEXPRESS;AttachDbFilename=\"|DataDirectory|\\Database1.mdf\";Integrated Security=True;User Instance=True;";
-        SqlConnection connection = new SqlConnection(cnnString);
-        string cmdText = "INSERT INTO videochat (username, pass, connid) VALUES ('"+user+"','"+pass+"','"+connid+"');";
+        string cnnString = "Server=localhost;Port=3306;Database=tut;Uid=root;Pwd=1234;default command timeout=3600; Connection Timeout=5;";
+        MySqlConnection connection = new MySqlConnection(cnnString);
+        string cmdText = "INSERT INTO videochat (user, pass, connid) VALUES (?user ,?pass, ?connid);";
 
-        SqlCommand cmd = new SqlCommand(cmdText, connection);
+        MySqlCommand cmd = new MySqlCommand(cmdText, connection);
 
         cmd.CommandType = CommandType.Text;
-        
+
+        cmd.Parameters.Add("?user", MySqlDbType.VarChar).Value = user;
+        cmd.Parameters.Add("?pass", MySqlDbType.VarChar).Value = pass;
+        cmd.Parameters.Add("?connid", MySqlDbType.VarChar).Value = connid;
+
         connection.Open();
 
         int result = cmd.ExecuteNonQuery();
@@ -36,20 +40,21 @@ public class ChatHub : Hub
         try
         {
             // Connection string for a typical local MySQL installation
-            string cnnString = "Data Source=.\\SQLEXPRESS;AttachDbFilename=\"|DataDirectory|\\Database1.mdf\";Integrated Security=True;User Instance=True;";
+            string cnnString = "Server=localhost;Port=3306;Database=tut;Uid=root;Pwd=1234;default command timeout=3600; Connection Timeout=5;";
+
             // Create a connection object 
-            SqlConnection connection = new SqlConnection(cnnString);
+            MySqlConnection connection = new MySqlConnection(cnnString);
 
             // Create a SQL command object
-            string cmdText = "DELETE FROM videochat WHERE [connid]='"+connid+"';";
+            string cmdText = "DELETE FROM videochat WHERE connid=(?connid);";
 
-            SqlCommand cmd = new SqlCommand(cmdText, connection);
+            MySqlCommand cmd = new MySqlCommand(cmdText, connection);
 
             connection.Open();
 
             cmd.CommandType = CommandType.Text;
 
-           
+            cmd.Parameters.Add("?connid", MySqlDbType.VarChar).Value = connid;
             cmd.ExecuteNonQuery();
             
             //                result.Text = "Done...";
